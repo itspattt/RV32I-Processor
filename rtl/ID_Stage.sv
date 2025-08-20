@@ -364,7 +364,7 @@ module ID_Stage (
       alu_operand_a_ex_op <= alu_operand_a_ex;
       alu_operand_b_ex_op <= alu_operand_b_ex;
       comparator_en_op <= comparator_en;
-      comparator_func_code_op = comparator_func_op;
+      comparator_func_op <= comparator_func;
 
       // Forwarded Instruction State to memory
       en_lsu_op <= en_lsu;

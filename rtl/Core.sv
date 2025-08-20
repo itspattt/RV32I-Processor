@@ -114,6 +114,12 @@ module Core (
 	logic comp_result;
 	logic comp_valid;
 
+	logic [31:0] FI;
+	logic [31:0] DI;
+	logic [31:0] ExI;
+	logic [31:0] MemI;
+	logic [31:0] WBI;
+
 	IF_Stage InstructionFetch_Module (
 		// General Inputs
 		.clock(clock),

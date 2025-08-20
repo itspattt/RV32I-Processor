@@ -38,8 +38,8 @@ module Stall_Control (
     stall_op = 1'b0;
     case(ID_instr_opcode_ip) 
 
-      OPCODE_BRANCH:
-      OPCODE_STORE:
+      OPCODE_BRANCH,
+      OPCODE_STORE,
       OPCODE_OP: begin
         
         /**
@@ -68,8 +68,8 @@ module Stall_Control (
 
       end
 
-      OPCODE_LOAD:
-      OPCODE_JALR:
+      OPCODE_LOAD,
+      OPCODE_JALR,
       OPCODE_OPIMM: begin
 
         /**

@@ -51,19 +51,19 @@ module ALU (
         alu_result_op = (alu_operand_a_ip & alu_operand_b_ip);
       end
       ALU_OR: begin
-        alu_result_op = (alu_operand_a | alu_operand_b);
+        alu_result_op = (alu_operand_a_ip | alu_operand_b_ip);
       end
       ALU_XOR: begin
-        alu_result_op = (alu_operand_a ^ alu_operand_b);
+        alu_result_op = (alu_operand_a_ip ^ alu_operand_b_ip);
       end
       ALU_SLL: begin
-        alu_result_op = (alu_operand_a << alu_operand_b);
+        alu_result_op = (alu_operand_a_ip << alu_operand_b_ip);
       end
       ALU_SRL: begin
-        alu_result_op = (alu_operand_a >> alu_operand_b);
+        alu_result_op = (alu_operand_a_ip >> alu_operand_b_ip);
       end
       ALU_SRA: begin
-        alu_result_op = (alu_operand_a >>> alu_operand_b);
+        alu_result_op = (alu_operand_a_ip >>> alu_operand_b_ip);
       end
 
 

@@ -71,7 +71,7 @@ module DRAM (
           load_data_op = $signed({data_RAM[data_addr + data_addr_ip + 2], data_RAM[data_addr + data_addr_ip + 3]});
         end
         LHU: begin
-          load_data_op = data_RAM[data_addr + data_addr_ip + 2], data_RAM[data_addr + data_addr_ip + 3];
+          load_data_op = {data_RAM[data_addr + data_addr_ip + 2], data_RAM[data_addr + data_addr_ip + 3]};
         end
         LB: begin
           load_data_op = $signed(data_RAM[data_addr + data_addr_ip + 3]);

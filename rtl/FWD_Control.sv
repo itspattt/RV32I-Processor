@@ -43,8 +43,8 @@ module FWD_Control (
     fb_mux_op = ORIGINAL_SELECT;
 
     case (id_instr_opcode_ip)
-      OPCODE_BRANCH:
-      OPCODE_STORE: // Both Branch and Store instructions use two registers, allowing them to be reused by R type instructions
+      OPCODE_BRANCH,
+      OPCODE_STORE, // Both Branch and Store instructions use two registers, allowing them to be reused by R type instructions
       OPCODE_OP: begin // Register-Register ALU operation
 
         /**
@@ -70,8 +70,8 @@ module FWD_Control (
 
       end
 
-      OPCODE_LOAD: // Loads are I-Type instructions
-      OPCODE_JALR:
+      OPCODE_LOAD, // Loads are I-Type instructions
+      OPCODE_JALR,
       OPCODE_OPIMM: begin // Register Immediate 
 
         /**
