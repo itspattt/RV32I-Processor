@@ -244,7 +244,7 @@ module ID_Stage (
         operand_b_select = J_IMMD;
       end
 
-      // JALR: rd = PC + 4 and PC = PC + offset (I_IMMD)
+      // JALR: rd = PC + 4 and PC = RS1 + offset (I_IMMD)
       OPCODE_JALR: begin
         writeback_mux = READ_PC4;
         pc_mux_inter = ALU_RESULT_JALR;
