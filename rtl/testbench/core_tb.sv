@@ -37,7 +37,7 @@ module Core_tb;
        32'h00000000, // NOP (keep as first instruction for simulation to work)
        32'h00300213,
 	32'h07ff0b7,
-	32'hff800167
+	32'h00400167
    };
 
 
