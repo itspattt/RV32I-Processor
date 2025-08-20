@@ -71,6 +71,7 @@ module FWD_Control (
       end
 
       OPCODE_LOAD: // Loads are I-Type instructions
+      OPCODE_JALR:
       OPCODE_OPIMM: begin // Register Immediate 
 
         /**
