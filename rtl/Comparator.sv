@@ -5,7 +5,7 @@
 
 import CORE_PKG::*;
 
-module comparator (
+module Comparator (
     // General Inputs
     input logic reset,
 

@@ -7,6 +7,7 @@ vlog -reportprogress 300 -work work {../IF_Stage.sv}
 vlog -reportprogress 300 -work work {../ID_Stage.sv}
 vlog -reportprogress 300 -work work {../Stall_Control.sv}
 vlog -reportprogress 300 -work work {../ALU.sv}
+vlog -reportprogress 300 -work work {../Comparator.sv}
 vlog -reportprogress 300 -work work {../EX_Stage.sv}
 vlog -reportprogress 300 -work work {../FWD_Control.sv}
 vlog -reportprogress 300 -work work {../DRAM.sv}

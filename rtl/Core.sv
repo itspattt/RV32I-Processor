@@ -110,7 +110,7 @@ module Core (
 	logic flush;
 
 	logic comp_en;
-	logic comp_ex_op;
+	comparator_func_code comp_ex_op;
 	logic comp_result;
 	logic comp_valid;
 

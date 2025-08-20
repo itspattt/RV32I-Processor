@@ -35,10 +35,9 @@ module Core_tb;
  // Remember, these resources are may be incorrect for some instruction types, so make sure to verify them with your RISC-V greencard
  bit [31:0] test_instructions [] = {
        32'h00000000, // NOP (keep as first instruction for simulation to work)
-       32'h05028293, // addi x5, x5, 80
-		32'h01428213, // addi x4, x5, 20
-		32'h00428533, // add x10, x5, x4
-		32'h40428633  // sub x12, x5, x4
+       32'h00300213,
+	32'h07ff0b7,
+	32'hff800167
    };
 
 
@@ -68,7 +67,7 @@ module Core_tb;
 	
 	
    // end simulation after (# of instructions * 4ns(clk period))
-   #($size(test_instructions) * 4) $finish;
+   #($size(test_instructions) * 20) $finish;
  end
 
 
