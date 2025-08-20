@@ -115,7 +115,7 @@ module EX_Stage (
   always @(posedge clock) begin
     lsu_enable_pt_op <= lsu_enable_pt_ip;
     ex_lsu_operator_pt_op <= ex_lsu_operator_pt_ip;
-    mem_wdata_pt_op <= mem_wdata_pt_ip;
+    mem_wdata_pt_op <= mem_wdata;
     alu_result_op <= alu_result;
     alu_valid_op <= alu_valid;
     ex_wb_mux_op <= ex_wb_mux_ip;
@@ -153,8 +153,13 @@ module EX_Stage (
       */
       EX_RESULT_SELECT: alu_operand_b = fw_mem_data;
       WB_RESULT_SELECT: alu_operand_b = fw_wb_data;
+      MEM_DATA_EX_SELECT: mem_wdata = fw_mem_data;
+      MEM_DATA_WB_SELECT: mem_wdata = fw_wb_data;
 
-      default: alu_operand_b = alu_operand_b_ip;
+      default: begin
+        alu_operand_b = alu_operand_b_ip;
+        mem_wdata = mem_wdata_pt_ip;
+      end
     endcase
   end
 

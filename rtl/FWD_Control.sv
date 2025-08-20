@@ -43,8 +43,7 @@ module FWD_Control (
     fb_mux_op = ORIGINAL_SELECT;
 
     case (id_instr_opcode_ip)
-      OPCODE_BRANCH,
-      OPCODE_STORE, // Both Branch and Store instructions use two registers, allowing them to be reused by R type instructions
+      OPCODE_BRANCH, // Both Branch and Store instructions use two registers, allowing them to be reused by R type instructions
       OPCODE_OP: begin // Register-Register ALU operation
 
         /**
@@ -87,6 +86,20 @@ module FWD_Control (
           fa_mux_op = WB_RESULT_SELECT;
         end
 
+      end
+
+      OPCODE_STORE: begin
+        if ((EX_MEM_RegWrite_en) && (EX_MEM_dest_ip != 5'b00000) && (EX_MEM_dest_ip == ID_dest_rs1_ip)) begin
+          fa_mux_op = EX_RESULT_SELECT;
+        end else if ((MEM_WB_RegWrite_en) && (MEM_WB_dest_ip != 5'b00000) && (MEM_WB_dest_ip == ID_dest_rs1_ip)) begin
+          fa_mux_op = WB_RESULT_SELECT;
+        end
+
+        if ((EX_MEM_RegWrite_en) && (EX_MEM_dest_ip != 5'b00000) && (EX_MEM_dest_ip == ID_dest_rs2_ip)) begin
+          fb_mux_op = MEM_DATA_EX_SELECT;
+        end else if ((MEM_WB_RegWrite_en) && (MEM_WB_dest_ip != 5'b00000) && (MEM_WB_dest_ip == ID_dest_rs2_ip)) begin
+          fb_mux_op = MEM_DATA_WB_SELECT;
+        end
       end
 
     endcase // That's it for forwarding logic. Other instructions do not actually read registers are therefore do not require forwarding logic.
