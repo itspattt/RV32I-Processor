@@ -62,6 +62,11 @@ module Core_tb;
      rv32_core.InstructionFetch_Module.InstructionMemory.instr_RAM[i * 4 + 2] = test_instructions[i][15:8];
      rv32_core.InstructionFetch_Module.InstructionMemory.instr_RAM[i * 4 + 3] = test_instructions[i][7:0];
    end
+
+  // Initialize the BHT
+   for (i = 0; i < 16; i++) begin
+     rv32_core.InstructionFetch_Module.BPU.hist_table[i] = 2'b01;
+   end
 	
 	#3 reset = 1'b0;
 	
