@@ -100,7 +100,7 @@ module EX_Stage (
       OFFSET: begin
         next_PC_addr_valid_op = comparator_valid;
         next_PC_addr_op = comparator_result ?  pc_branch_offset_ip : 0;
-        flush_op = comparator_valid;
+        flush_op = comparator_result;
       end
       default begin
         next_PC_addr_valid_op = 0;
@@ -142,6 +142,8 @@ module EX_Stage (
       default:  alu_operand_a = alu_operand_a_ip;
     endcase
   end
+
+  assign comparator_result_op = comparator_result;
 
   // Forward Values for Source Register 2
   always @(*) begin
