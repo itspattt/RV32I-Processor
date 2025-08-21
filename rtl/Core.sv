@@ -114,6 +114,11 @@ module Core (
 	logic comp_result;
 	logic comp_valid;
 
+	logic prediction_if_id;
+	logic prediction_id_ex;
+
+	logic taken;
+
 	logic [31:0] FI;
 	logic [31:0] DI;
 	logic [31:0] ExI;
@@ -134,13 +139,16 @@ module Core (
 		// Inputs from EX of possible new PC 
 		.alu_result_ip(alu_next_pc_addr),
 		.alu_result_valid_ip(alu_next_pc_addr_valid),
+		.ex_instr_pc_addr_ip(ex_instr_pc_addr_pt),
 		.comp_result_ip(comp_result),
 		.flush_ip(flush),
+		.taken_ip(taken),
 
 		// Outputs to Decode
 		.instr_valid_op(instr_mem_valid),
 		.instr_data_op(instr_mem_data),
-		.instr_pc_addr_op(if_instr_pc_addr)
+		.instr_pc_addr_op(if_instr_pc_addr),
+		.prediction_op(prediction_if_id)
 	);
 
 	ID_Stage InstructionDecode_Module (
@@ -149,6 +157,8 @@ module Core (
 		.reset(reset),
 		.pc(if_instr_pc_addr),
 		.pc4(next_instr_addr),
+
+		.prediction_pt_ip(prediction_if_id),
 
 		// Inputs from MEM
 		.instr_data_valid_ip(instr_mem_valid),
@@ -166,6 +176,7 @@ module Core (
 		.alu_operand_b_ex_op(alu_operand_b),
 		.comparator_en_op(comp_en),
 		.comparator_func_op(comp_ex_op),
+		.prediction_pt_op(prediction_id_ex),
 
 		// Flush from EX
 		.flush_ip(flush),
@@ -224,6 +235,7 @@ module Core (
 		.alu_operand_b_ip(alu_operand_b),
 		.comparator_enable_ip(comp_en),
 		.comparator_operator_ip(comp_ex_op),
+		.prediction_ip(prediction_id_ex),
 
 		// Signals from Forw Controller
 		.fa_mux_ip(FA),
@@ -259,6 +271,7 @@ module Core (
 		.comparator_result_op(comp_result),
 		.comparator_valid_op(comp_valid),
 		.flush_op(flush),
+		.taken_op(taken),
 
 
 		// Outputs to forward to Fetch for Flush Control

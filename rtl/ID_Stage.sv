@@ -30,6 +30,7 @@ module ID_Stage (
   // Inputs from WB
   input logic [4:0] write_reg_addr_ip,
   input logic [31:0] wb_data_ip,
+  input logic prediction_pt_ip,
   input logic wb_data_valid_ip,
 
   // Inputs from ALU
@@ -44,6 +45,7 @@ module ID_Stage (
   // Outputs to comparator
   output logic comparator_en_op,
   output comparator_func_code comparator_func_op,
+  input logic prediction_pt_op,
 
   // Pass through to Writeback
   output logic [4:0] write_reg_addr_op,
@@ -353,6 +355,7 @@ module ID_Stage (
       EX_instruction_opcode <= 0;
       ID_src1_reg_addr <= 0;
       ID_src2_reg_addr <= 0;
+      prediction_pt_op <= 0;
 
       // Forwarded PC addr.
       id_pc_addr_pt_op <= 0;
@@ -366,6 +369,7 @@ module ID_Stage (
       alu_operand_b_ex_op <= alu_operand_b_ex;
       comparator_en_op <= comparator_en;
       comparator_func_op <= comparator_func;
+      prediction_pt_op <= prediction_pt_ip;
 
       // Forwarded Instruction State to memory
       en_lsu_op <= en_lsu;

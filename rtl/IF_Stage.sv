@@ -29,8 +29,10 @@ module IF_Stage (
   // Inputs from ALU / Comparator
   input logic [31:0] alu_result_ip,
 	input logic alu_result_valid_ip,
+	input logic [31:0] ex_instr_pc_addr_ip,
 	input logic comp_result_ip,
 	input logic flush_ip,
+	input logic taken_ip,
 
 	// Inputs from comparator
 	// input logic comp_result_ip,
@@ -39,7 +41,8 @@ module IF_Stage (
   // Outputs to DECODE
   output logic instr_valid_op,              // Addr. signal sent is valid
   output logic [31:0] instr_data_op,      // Addr. containing the instruction in memory to fetch
-	output logic [31:0] instr_pc_addr_op
+	output logic [31:0] instr_pc_addr_op,
+	output logic prediction_op
 );
 
 	logic mem_instr_req_valid;
@@ -50,21 +53,24 @@ module IF_Stage (
 	logic [31:0] instr_data;
 
 	logic [31:0] Next_PC;
+	logic prediction;
 
   always @(*) begin
     if (reset == 1'b1) begin
       Next_PC = 0;
 	end else if (stall_ip == 1'b1) begin
 		Next_PC = pc_addr;
-	end
-    else begin
+	end else if (prediction == 1'b1) begin
+		// Construct the immediate early
+		B_IMM = $signed({instr_data[31], instr_data[7], instr_data[30:25], instr_data[11:8], 1'b0});
+		Next_PC = pc_addr + B_IMM; // Next instruction will include the guess
+	end else begin
       unique case (pc_mux_ip)
         NEXTPC: Next_PC = pc_addr + 4;
         ALU_RESULT: Next_PC = alu_result_valid_ip ? alu_result_ip: pc_addr; // If not valid, then stall until valid
 		ALU_RESULT_JALR: Next_PC = alu_result_valid_ip ? alu_result_ip : pc_addr; // Same here. PC should already be aligned from EX.
 		OFFSET: Next_PC = alu_result_valid_ip && comp_result_ip ? alu_result_ip : pc_addr + 4; // If branch is taken, PC = PC + Offset. Otherwise, PC = PC + 4.
         default: Next_PC = pc_addr + 4;
-		
       endcase
     end
   end
@@ -77,16 +83,19 @@ module IF_Stage (
 			instr_valid_op <= 0;
 			instr_data_op <= 0;
 			instr_pc_addr_op <= 0;
+			prediction_op <= 0;
 		end
 		else if (stall_ip == 1'b1) begin 
 			instr_pc_addr_op <= instr_pc_addr_op;
 			instr_valid_op <= instr_valid_op;
 			instr_data_op <= instr_data_op;
+			prediction_op <= prediction_op;
 		end
 		else begin
 			instr_pc_addr_op <= pc_addr;
 			instr_valid_op <= instr_valid;
 			instr_data_op <= instr_data;
+			prediction_op <= prediction;
 		end
 	end
 
@@ -115,5 +124,14 @@ module IF_Stage (
 		.instr_valid_op(instr_valid),         
 		.instr_data_op(instr_data)  
 	);
+
+	Branch_Predictor BPU (
+		.clk(clock),
+		.if_pc(pc_addr),
+		.ex_pc(ex_instr_pc_addr_ip),
+		.taken_ip(taken_ip),
+
+		.prediction(prediction)
+	)
 
 endmodule

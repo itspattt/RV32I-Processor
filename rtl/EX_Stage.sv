@@ -26,6 +26,7 @@ module EX_Stage (
   input logic [31:0] alu_operand_b_ip,
   input logic comparator_enable_ip,
   input comparator_func_code comparator_operator_ip,
+  input logic prediction_ip,
 
   // Operand Selector from Forward Controller
   input forward_mux_code fa_mux_ip,
@@ -39,7 +40,7 @@ module EX_Stage (
   input logic [31:0] mem_wdata_pt_ip,
   input write_back_mux_selector ex_wb_mux_ip,
   input logic [4:0] ex_write_reg_addr_pt_ip,
-  input logic [31:0] ex_pc_addr_pt_ip,
+  input logic [31:0] ex_pc_addr_pt_ip, // PC of instruction 2 stages prior
   input logic [31:0] ex_uimmd_pt_ip,
 
   // Pass-Through to Fetch based on Flush Controller and Writeback
@@ -69,7 +70,8 @@ module EX_Stage (
   output logic [31:0] ex_uimmd_pt_op,
 
   // Output Flush Signal
-  output logic flush_op
+  output logic flush_op,
+  output logic taken_op
 
 );
 
@@ -85,6 +87,7 @@ module EX_Stage (
   always @(*) begin
     next_PC_addr_valid_op = 0;
     next_PC_addr_op = 0;
+    taken_op = 0;
 
     case (pc_mux_ip)
       ALU_RESULT: begin
@@ -100,7 +103,8 @@ module EX_Stage (
       OFFSET: begin
         next_PC_addr_valid_op = comparator_valid;
         next_PC_addr_op = comparator_result ?  pc_branch_offset_ip : 0;
-        flush_op = comparator_result;
+        taken_op = comparator_result;
+        flush_op = prediction_ip ^ comparator_result;
       end
       default begin
         next_PC_addr_valid_op = 0;
