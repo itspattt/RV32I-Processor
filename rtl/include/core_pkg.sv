@@ -190,11 +190,11 @@ package CORE_PKG;
     MEM_DATA_WB_SELECT = 3'b101
   } forward_mux_code;
 
-  typedef enum logic [2:0] {
-    nntaken = 2'b00;
-    ntaken = 2'b01;
-    taken = 2'b10;
-    ttaken = 2'b11;
+  typedef enum logic [1:0] {
+    nntaken = 2'b00,
+    ntaken = 2'b01,
+    taken = 2'b10,
+    ttaken = 2'b11
   } bht_state;
 
 endpackage

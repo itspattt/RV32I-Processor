@@ -14,6 +14,7 @@
 //
 //***********************************************************
 `timescale 1ns / 1ns
+import CORE_PKG::*;
 
 module Core_tb;
 
@@ -37,7 +38,7 @@ module Core_tb;
        32'h00000000, // NOP (keep as first instruction for simulation to work)
        32'h00500093,
 32'h00500113,
-32'hfe208ce3
+32'hfe209ce3
    };
 
 

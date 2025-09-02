@@ -56,6 +56,7 @@ module EX_Stage (
   // Outputs to LSU, MEM, and Fetch
   output logic [31:0] alu_result_op,
   output logic alu_valid_op,
+  output logic prediction_ex_op, // To signal that PC was already updated
 
   output logic comparator_result_op,
   output logic comparator_valid_op,
@@ -63,6 +64,7 @@ module EX_Stage (
   // Outputs to forward to Fetch for Flush Control
   output logic [31:0] next_PC_addr_op,
   output logic next_PC_addr_valid_op,
+  output logic [31:0] ex_pc_op,
 
   // Pass Through the WriteBack Mux Signal
   output write_back_mux_selector ex_wb_mux_op,
@@ -83,11 +85,14 @@ module EX_Stage (
 
   logic [31:0] mem_wdata;
 
+  assign ex_pc_op = ex_pc_addr_pt_ip;
+
   // For JAL Instruction to give new PC Address
   always @(*) begin
     next_PC_addr_valid_op = 0;
     next_PC_addr_op = 0;
     taken_op = 0;
+    prediction_ex_op = 0;
 
     case (pc_mux_ip)
       ALU_RESULT: begin
@@ -100,9 +105,10 @@ module EX_Stage (
         next_PC_addr_op = {alu_result[31:1], 1'b0};
         flush_op = alu_valid;
       end
-      OFFSET: begin
+      OFFSET: begin // If prediction_ip is high, we have already set the pc in IF to it's predicted value, so we don't need to set it again.
         next_PC_addr_valid_op = comparator_valid;
         next_PC_addr_op = comparator_result ?  pc_branch_offset_ip : 0;
+        prediction_ex_op = prediction_ip;
         taken_op = comparator_result;
         flush_op = prediction_ip ^ comparator_result;
       end

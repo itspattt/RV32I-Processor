@@ -33,6 +33,7 @@ module IF_Stage (
 	input logic comp_result_ip,
 	input logic flush_ip,
 	input logic taken_ip,
+	input logic prediction_ex_ip,
 
 	// Inputs from comparator
 	// input logic comp_result_ip,
@@ -51,6 +52,7 @@ module IF_Stage (
 
 	logic instr_valid;
 	logic [31:0] instr_data;
+	logic [31:0] B_IMM;
 
 	logic [31:0] Next_PC;
 	logic prediction;
@@ -60,6 +62,8 @@ module IF_Stage (
       Next_PC = 0;
 	end else if (stall_ip == 1'b1) begin
 		Next_PC = pc_addr;
+	end else if (prediction_ex_ip == 1'b1 && !flush_ip) begin
+		Next_PC = pc_addr + 4; // Since the branch already fetched the next two instructions, we just fetch pc+4.
 	end else if (prediction == 1'b1) begin
 		// Construct the immediate early
 		B_IMM = $signed({instr_data[31], instr_data[7], instr_data[30:25], instr_data[11:8], 1'b0});
@@ -131,7 +135,7 @@ module IF_Stage (
 		.ex_pc(ex_instr_pc_addr_ip),
 		.taken_ip(taken_ip),
 
-		.prediction(prediction)
-	)
+		.prediction_op(prediction)
+	);
 
 endmodule

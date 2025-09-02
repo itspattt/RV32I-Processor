@@ -45,7 +45,7 @@ module ID_Stage (
   // Outputs to comparator
   output logic comparator_en_op,
   output comparator_func_code comparator_func_op,
-  input logic prediction_pt_op,
+  output logic prediction_pt_op,
 
   // Pass through to Writeback
   output logic [4:0] write_reg_addr_op,

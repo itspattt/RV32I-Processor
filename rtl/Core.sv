@@ -116,8 +116,10 @@ module Core (
 
 	logic prediction_if_id;
 	logic prediction_id_ex;
+	logic prediction_ex2if;
 
 	logic taken;
+	logic [31:0] ex_if_pc;
 
 	logic [31:0] FI;
 	logic [31:0] DI;
@@ -139,8 +141,9 @@ module Core (
 		// Inputs from EX of possible new PC 
 		.alu_result_ip(alu_next_pc_addr),
 		.alu_result_valid_ip(alu_next_pc_addr_valid),
-		.ex_instr_pc_addr_ip(ex_instr_pc_addr_pt),
+		.ex_instr_pc_addr_ip(ex_if_pc),
 		.comp_result_ip(comp_result),
+		.prediction_ex_ip(prediction_ex2if),
 		.flush_ip(flush),
 		.taken_ip(taken),
 
@@ -270,6 +273,7 @@ module Core (
 		.alu_valid_op(ex_alu_result_valid_pt),
 		.comparator_result_op(comp_result),
 		.comparator_valid_op(comp_valid),
+		.prediction_ex_op(prediction_ex2if),
 		.flush_op(flush),
 		.taken_op(taken),
 
@@ -278,6 +282,7 @@ module Core (
 		.next_PC_addr_op(alu_next_pc_addr),
 		.next_PC_addr_valid_op(alu_next_pc_addr_valid),
 
+		.ex_pc_op(ex_if_pc),
 		.ex_wb_mux_op(ex_wb_mux_pt),
 		.ex_pc_addr_pt_op(ex_instr_pc_addr_pt),
 		.ex_uimmd_pt_op(ex_uimmd_pt)

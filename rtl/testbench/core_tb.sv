@@ -14,6 +14,7 @@
 //
 //***********************************************************
 `timescale 1ns / 1ns
+import CORE_PKG::*;
 
 module Core_tb;
 
@@ -37,7 +38,7 @@ module Core_tb;
        32'h00000000, // NOP (keep as first instruction for simulation to work)
        32'h00500093,
 32'h00500113,
-32'hfe209ce3
+32'hfe208ce3
    };
 
 
@@ -61,11 +62,6 @@ module Core_tb;
      rv32_core.InstructionFetch_Module.InstructionMemory.instr_RAM[i * 4 + 1] = test_instructions[i][23:16];
      rv32_core.InstructionFetch_Module.InstructionMemory.instr_RAM[i * 4 + 2] = test_instructions[i][15:8];
      rv32_core.InstructionFetch_Module.InstructionMemory.instr_RAM[i * 4 + 3] = test_instructions[i][7:0];
-   end
-
-  // Initialize the BHT
-   for (i = 0; i < 16; i++) begin
-     rv32_core.InstructionFetch_Module.BPU.hist_table[i] = 2'b01;
    end
 	
 	#3 reset = 1'b0;
